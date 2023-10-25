@@ -33,8 +33,9 @@ mainEl.innerHTML =  "<h1>SEI Rocks!</h1>"
 mainEl.classList.add("flex-ctr")
 
 //Task 2.0 (select and cache <nav id="top-menu"> in variable topMenuEl
-const topMenuEl = document.querySelector('nav')
-//console.log(topMenuEl)
+//const topMenuEl = document.querySelector('nav')
+topMenuEl = document.getElementById('top-menu')
+console.log(topMenuEl)
 
 //Task 2.1 (Set the height topMenuEl element to be 100%.)
 topMenuEl.style.height = "100%"
@@ -47,11 +48,12 @@ topMenuEl.classList.add("flex-around")
 
 //Task 3.1
 // iterate over the menulinks array,for each link object create an <a> element
-menuLinks.forEach(link => {
-  const anchorEl= document.createElement('a');
+menuLinks.forEach(function(link) {
+  const anchorEl= document.createElement('a')
 // on the new element add an href attribute with prop = link object
-  anchorEl.href = link.href;
-  anchorEl.textContent = link.text;
+//  anchorEl.href = link.href;
+  anchorEl.setAttribute('href', link.href)
+  anchorEl.textContent = link.text
 // append the new element to top menu El
   topMenuEl.appendChild(anchorEl);
 });
@@ -60,7 +62,8 @@ menuLinks.forEach(link => {
 
 //Task 4.0
 //Select and cache the <nav id="sub-menu"> element in a variable named subMenuEl.
-const subMenuEl = document.querySelector("#sub-menu")
+//const subMenuEl = document.querySelector("#sub-menu")
+const subMenuEl = document.getElementById("sub-menu")
 //console.log(subMenuEl)
 
 //Task 4.1
@@ -86,7 +89,8 @@ subMenuEl.style.top = "0"
 
 // Task 5.1
 //Select and cache all of the <a> elements inside of topMenuEl in a variable named topMenuLinks.
-const topMenuLinks = topMenuEl.querySelectorAll('a')
+//const topMenuLinks = topMenuEl.querySelectorAll('a')
+const topMenuLinks = topMenuEl.querySelectorAll('#top-menu a')
 console.log("top menu links " + topMenuLinks)
 //Declare a global showingSubMenu variable and initialize it to false;
 let showingSubMenu = false
@@ -96,18 +100,46 @@ let showingSubMenu = false
 //The first line of code of the event listener function should call the event object’s preventDefault() method.
 topMenuEl.addEventListener("click", function(e) {
     e.preventDefault();
+    const link = e.target 
     //check to see if the clicked element is an <a> element
-    if (e.target.tagName !== "A") {
-        console.log(e.target.innerText, e.target.tagName)
-        return
-    }
-    if (e.target.classList.contains('active')) {
-        e.target.classList.remove('active')
+    console.log(link)
+    if (link.tagName !== "A") return
+    // if (e.target.tagName !== "A") {
+    //     console.log(e.target.innerText, e.target.tagName)
+    //     return
+    // }
+    if (link.classList.contains("active")) {
+        link.classList.remove("active")
+    //if (e.target.classList.contains('active')) {
+        // e.target.classList.remove('active')
         showingSubMenu = false
         subMenuEl.style.top = "0"
-        console.log("click a valid menu item")
+        console.log("clicked a valid menu item")
         return
         }
+    //5.4 iterate (forEach) over each <a> element in topMenuLinks and removes the class name of active
+    topMenuLinks.forEach(function(link) {
+        link.classList.remove("active")
+    })
+    // 5.5 add a class name of active to the <a> element that was clicked.
+    link.classList.add("active")
+
+    //5.6
+
+    //STUCK HARD
+    const linkData = menuLinks.find(function(linkObj) {
+        console.log(linObj.text)
+        return linkObj.text === link.textContent;
+      });
+      showingSubMenu = 'subLinks' in linkData;
+
+      if (showingSubMenu) {
+        buildSubMenu(linkData.subLinks);
+        subMenuEl.style.top = '100%';
+      } else {
+        subMenuEl.style.top = '0';
+        mainEl.innerHTML = '<h1>about</h1>';
+      }
 });
 
 //Task 5.3  See code in above /\
@@ -116,4 +148,27 @@ topMenuEl.addEventListener("click", function(e) {
     2. Set the showingSubMenu to false.
     3. Set the CSS top property of subMenuEl to 0.
     4. Return; from the event listener function.
+*/
+//Task 5.4
+//Add code to the bottom of the the event listener that iterates over each <a> element in topMenuLinks and 
+//removes the class name of active, regardless of whether the <a> element has a class of active or not.
+
+//Task 5.5
+//The event listener should add a class name of active to the <a> element that was clicked.
+
+//Task 5.6
+//add code in the event listener that sets showingSubMenu to true if the clicked <a> element’s “link” object 
+// within menuLinks has a subLinks property (all do, except for the “link” object for ABOUT), otherwise, set it to false.
+
+//Task 5.7
+/* in the event listener…
+
+If showingSubMenu is true:
+
+Call a buildSubMenu function, passing to it the subLinks array for the clicked <a> element.
+Set the CSS top property of subMenuEl to 100%.
+Otherwise (showingSubMenu is false):
+
+Set the CSS top property of subMenuEl to 0.
+Since the About link has been clicked, set mainEl.innerHTML to '<h1>about</h1>'.
 */
