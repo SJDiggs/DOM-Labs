@@ -126,21 +126,43 @@ topMenuEl.addEventListener("click", function(e) {
 
     //5.6
 
-    //STUCK HARD
+    //*********************** STUCK HARD HERE ***************************
     const linkData = menuLinks.find(function(linkObj) {
-        console.log(linObj.text)
+        //return true if the text property of linkObj matches the link text content
         return linkObj.text === link.textContent;
       });
+      // showingSubMenu will be true if clicked
       showingSubMenu = 'subLinks' in linkData;
+      //console.log("Showing sub menu value = " + showingSubMenu)
 
       if (showingSubMenu) {
+//      If showingSubMenu 'true': Call a buildSubMenu function, passing to it the subLinks array for the clicked <a> element.
+//      and set the CSS top property of subMenuEl to 100%.
         buildSubMenu(linkData.subLinks);
         subMenuEl.style.top = '100%';
       } else {
-        subMenuEl.style.top = '0';
-        mainEl.innerHTML = '<h1>about</h1>';
+//          Set the CSS top property of subMenuEl to 0.
+//          Since the About link has been clicked, set mainEl.innerHTML to '<h1>about</h1>'.
+            subMenuEl.style.top = '0';
+            mainEl.innerHTML = '<h1>about</h1>';
       }
+    
 });
+// Task 5.8
+function buildSubMenu(subLinks) {
+    //Clear the contents of subMenuEl by using setting innerHTML to ''
+    subMenuEl.innerHTML = '';
+    //Then iterate over the subLinks array (passed as an argument) and for each “link” object: Create an <a> element (**see 3.1)
+    subLinks.forEach(function(link) {
+      const linkEl = document.createElement('a');
+      //
+      linkEl.setAttribute('href', link.href);
+      //Set the new element’s content (.textContent) to the value of the text property of the “link” object.
+      linkEl.textContent = link.text;
+      //Append the new element to the subMenuEl element.
+      subMenuEl.appendChild(linkEl);
+    });
+  }
 
 //Task 5.3  See code in above /\
 /* In the event listener, if the clicked <a> link has a class of active:
@@ -171,4 +193,14 @@ Otherwise (showingSubMenu is false):
 
 Set the CSS top property of subMenuEl to 0.
 Since the About link has been clicked, set mainEl.innerHTML to '<h1>about</h1>'.
+*/
+
+//Task 5.8
+/*Code the buildSubMenu function so that it:
+
+Clears the contents of subMenuEl.
+Iterates over the subLinks array passed as an argument; and for each “link” object: Create an <a> element.
+On the new element, add an href attribute with its value set to the href property of the “link” object.
+Set the new element’s content to the value of the text property of the “link” object.
+Append the new element to the subMenuEl element.
 */
